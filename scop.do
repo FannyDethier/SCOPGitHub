@@ -12,7 +12,7 @@ ssc install xtoverid
 ssc install ranktest 
 ssc install ivreg2
 capt ssc inst estout
-net install github, from("https://raw.githubusercontent.com/haghish/github/master/")
+
 
 // -----------------------------------------------------------------------------
 					***PREPARING VARIABLES***
