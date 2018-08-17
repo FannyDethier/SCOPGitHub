@@ -483,3 +483,4 @@ note:  724 obs. (34.2%) have only a single record; they will be ignored
 . 
 end of do-file
 
+. exit, clear

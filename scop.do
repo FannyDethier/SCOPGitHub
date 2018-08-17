@@ -223,7 +223,7 @@ capt ssc inst estout
 	*snapspan idvar time_var instantaneous_vars, generate(new_begin_date)
 	snapspan id time1 bankrupt salaries societaires_salaries societaires capital_social_ou_individuel K tota_capital_salaris_associs dividend age lnK LS KLS CO COKLS SMALL MEDIUM LARGE, generate (time0) replace
 	
-	stset time1, time0(time0) failure(bankrupt=1) id(id) origin(annee_creation)
+	stset time1, time0(time0) failure(bankrupt==1) id(id) origin(annee_creation)
 	
 	gen time = annee_radiation - 2006 if bankrupt == 1
 	replace time = 8 if bankrupt == 0
