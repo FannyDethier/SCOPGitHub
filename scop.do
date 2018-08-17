@@ -2,7 +2,7 @@ cap log close
 clear
 set more off 
 clear matrix
-cd "C:\Users\dethi\Documents\Article SCOP\Stata_FD"
+cd "C:\Users\dethi\Documents\GitHub\SCOPGitHub"
 version 13.0
 log using SCOP.log, replace
 log on
@@ -211,18 +211,22 @@ capt ssc inst estout
 	replace LARGE = 0 if LARGE == .
 
 	*Life of the SCOP*
-	tostring annee_creation, replace
-	gen start = date(annee_creation, "Y") 
-	format start %td
-	tostring annee_radiation, replace
-	gen end = date(annee_radiation, "Y") 
-	format end %td
-	gen bankrupt = 1 if annee_radiation != .
-	replace bankrupt = 0 if annee_radiation == .
-	label variable bankrupt "1 if SCOP has known (between 2006 and 2014) bankruptcy, 0 otherwise"
+	//tostring annee_creation, replace
+	//gen start = date(annee_creation, "Y") 
+	//format start %td
+	//tostring annee_radiation, replace
+	//gen end = date(annee_radiation, "Y") 
+	//format end %td
+	gen bankrupt = 1 if (year+1) == annee_radiation |(year+2) == annee_radiation | (year+3) == annee_radiation
+	replace bankrupt = 0 if bankrupt == .
+	label variable bankrupt "1 if SCOP has known bankruptcy, 0 otherwise"
+	
+	tostring year, replace
+	gen date = date(year, "Y") 
+	format date %td
 	
 	*snapspan idvar time_var instantaneous_vars, generate(new_begin_date)
-	snapspan id year annee_radiation salaries societaires_salaries societaires L capital_social_ou_individuel K tota_capital_salaris_associs rserves_lgales fonds_de_dveloppement dividende interessement participation ca_net_total V resultat_exploitation resultat_courant_avant_impots annee_radiation age lnV lnL lnK LS KLS CO COKLS PARTL, generate (time0)
+	snapspan id date bankrupt, generate (time0) replace
 	
 	gen time = annee_radiation - 2006 if bankrupt == 1
 	replace time = 8 if bankrupt == 0
@@ -1153,4 +1157,4 @@ summarize $time $event $xlist
 * Set data as survival time
 stset $time, id(id) failure($event)
 
-exit
+
