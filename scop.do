@@ -211,22 +211,19 @@ capt ssc inst estout
 	replace LARGE = 0 if LARGE == .
 
 	*Life of the SCOP*
-	//tostring annee_creation, replace
-	//gen start = date(annee_creation, "Y") 
-	//format start %td
-	//tostring annee_radiation, replace
-	//gen end = date(annee_radiation, "Y") 
-	//format end %td
+
 	gen bankrupt = 1 if (year+1) == annee_radiation |(year+2) == annee_radiation | (year+3) == annee_radiation
 	replace bankrupt = 0 if bankrupt == .
 	label variable bankrupt "1 if SCOP has known bankruptcy, 0 otherwise"
 	
 	tostring year, replace
-	gen date = date(year, "Y") 
-	format date %td
+	gen time1 = date(year, "Y") 
+	format time1 %td
 	
 	*snapspan idvar time_var instantaneous_vars, generate(new_begin_date)
-	snapspan id date bankrupt, generate (time0) replace
+	snapspan id time1 bankrupt salaries societaires_salaries societaires capital_social_ou_individuel K tota_capital_salaris_associs dividend age lnK LS KLS CO COKLS SMALL MEDIUM LARGE, generate (time0) replace
+	
+	stset time1, time0(time0) failure(bankrupt=1) id(id) origin(annee_creation)
 	
 	gen time = annee_radiation - 2006 if bankrupt == 1
 	replace time = 8 if bankrupt == 0

@@ -1,8 +1,8 @@
--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
        log:  C:\Users\dethi\Documents\GitHub\SCOPGitHub\SCOP.log
   log type:  text
- opened on:  17 Aug 2018, 11:51:52
+ opened on:  17 Aug 2018, 15:42:26
 
 . log on
 (log already on)
@@ -21,10 +21,6 @@ all files already exist and are up to date.
 . capt ssc inst estout
 
 . 
-end of do-file
-
-. do "C:\Users\dethi\AppData\Local\Temp\STD27fc_000000.tmp"
-
 . // -----------------------------------------------------------------------------
 .                                         ***PREPARING VARIABLES***
 . //------------------------------------------------------------------------------
@@ -39,8 +35,7 @@ end of do-file
 
 .         label variable salaries "number of employees"
 
-.         label variable societaires_salaries "numbers of employees members of the co
-> op"
+.         label variable societaires_salaries "numbers of employees members of the coop"
 
 .         label variable societaires "number of member of the coop"
 
@@ -60,11 +55,9 @@ end of do-file
 
 .         label variable dividende "dividend (only to member)"
 
-.         label variable part_travail_non_affect_partic "year distrbituion of profir 
-> to worker not for partitipcation"
+.         label variable part_travail_non_affect_partic "year distrbituion of profir to worker not for partitipcation"
 
-.         label variable part_travail_deuxieme_dot_partic "year distrbituion of profi
-> r to worker for partitipcation"
+.         label variable part_travail_deuxieme_dot_partic "year distrbituion of profir to worker for partitipcation"
 
 .         label variable ca_net_total "ca"
 
@@ -101,10 +94,8 @@ end of do-file
 (29 missing values generated)
 
 .         
-.         *K: the total equity of the SCOP, i.e. the sum of capital shares, legal and
->  statutory reserves, retained earnings (that is to say, the net surplus from previo
-> us years retained and not allocated to reserves) and the profit for the year, in eu
-> ro;
+.         *K: the total equity of the SCOP, i.e. the sum of capital shares, legal and statutory reserves, retained earnings (that is to say, t
+> he net surplus from previous years retained and not allocated to reserves) and the profit for the year, in euro;
 .         rename total_capitaux_propres K
 
 .         drop if capital_social_ou_individuel == .
@@ -113,27 +104,22 @@ end of do-file
 .         gen lnK = ln(K)
 (555 missing values generated)
 
-.                 *According to the law, the capital can not be less than 30 € in the
->  SARL and 18 500 € in the SA.
-.                 drop if capital_social_ou_individuel < 30 & catjur == "Société à re
-> sponsabilité limitée (SARL)"
+.                 *According to the law, the capital can not be less than 30 € in the SARL and 18 500 € in the SA.
+.                 drop if capital_social_ou_individuel < 30 & catjur == "Société à responsabilité limitée (SARL)"
 (0 observations deleted)
 
-.                 drop if capital_social_ou_individuel < 18500 & catjur == "Société a
-> nonyme à conseil d'administration"
+.                 drop if capital_social_ou_individuel < 18500 & catjur == "Société anonyme à conseil d'administration"
 (0 observations deleted)
 
 .         
-.         *LS: the proportion of workers who are co-owners/shareholders of the SCOP, 
-> in percentage;  
+.         *LS: the proportion of workers who are co-owners/shareholders of the SCOP, in percentage;  
 .         gen LS =  societaires_salaries / salaries
 (1 missing value generated)
 
 .         drop if LS == .
 (1 observation deleted)
 
-.         label variable LS "the proportion of workers who are co-owners/shareholders
->  of the SCOP, in percentage"
+.         label variable LS "the proportion of workers who are co-owners/shareholders of the SCOP, in percentage"
 note: label truncated to 80 characters
 
 .         
@@ -144,17 +130,15 @@ note: label truncated to 80 characters
 .         replace KLS = . if KLS < 0 
 (0 real changes made)
 
-.         label variable KLS "the average capital shares held by member-workers, in e
-> uro"
+.         label variable KLS "the average capital shares held by member-workers, in euro"
 
-.                 *is it possible to have a scop with no capital held by workers? I w
-> ould say that it is impossible
+.                 *is it possible to have a scop with no capital held by workers? I would say that it is impossible
 .                 drop if tota_capital_salaris_associs == .
 (170 observations deleted)
 
 .                 
-.         *COKLS: the share of net operating surplus allocated to collective reserves
-> , namely the legal reserve and the development funds, per member-workers, in euro;
+.         *COKLS: the share of net operating surplus allocated to collective reserves, namely the legal reserve and the development funds, per
+>  member-workers, in euro;
 .         gen CO = rserves_lgales + fonds_de_dveloppement
 (2,873 missing values generated)
 
@@ -167,14 +151,12 @@ note: label truncated to 80 characters
 .         replace COKLS = 0 if COKLS == .
 (2,873 real changes made)
 
-.         label variable COKLS "the share of net operating surplus allocated to colle
-> ctive reserves, namely the legal reserve and the development funds, per member-work
-> ers, in euro"
+.         label variable COKLS "the share of net operating surplus allocated to collective reserves, namely the legal reserve and the developm
+> ent funds, per member-workers, in euro"
 note: label truncated to 80 characters
 
 .         
-.         *PARTL: the share of net operating surplus allocated to workers, members or
->  not, per worker, in euro.
+.         *PARTL: the share of net operating surplus allocated to workers, members or not, per worker, in euro.
 .         replace interessement = 0 if interessement == .
 (3,931 real changes made)
 
@@ -183,26 +165,23 @@ note: label truncated to 80 characters
 
 .         gen PARTL = (interessement + participation)  / societaires_salaries 
 
-.         label variable PARTL "the share of net operating surplus allocated to worke
-> rs, members or not, per worker, in euro"
+.         label variable PARTL "the share of net operating surplus allocated to workers, members or not, per worker, in euro"
 note: label truncated to 80 characters
 
 . 
 . * Building new binary variables 
 . 
 .         /* Methods of creation
->         The following binary variables take the value "1" when the cooperative belo
-> ngs to this category, "0" otherwise.
+>         The following binary variables take the value "1" when the cooperative belongs to this category, "0" otherwise.
 >         Founding methods
 >         There are four methods to found a SCOP:
 >         -       EXNIHILO: the company started under the SCOP form;
->         -       REANIM: the company was operating under a different legal form from
->  SCOP, temporarily ceased its activities and restarted under the SCOP form;
->         -       TRANSFO: the company was operating under a different legal form fro
-> m SCOP and has been transformed into a SCOP without a cease of its activities;
->         -       TRANSMI: the company was operating under a different legal form fro
-> m SCOP and has been transformed into a SCOP when the owner passed it down to the wo
-> rkers.*/
+>         -       REANIM: the company was operating under a different legal form from SCOP, temporarily ceased its activities and restarted un
+> der the SCOP form;
+>         -       TRANSFO: the company was operating under a different legal form from SCOP and has been transformed into a SCOP without a cea
+> se of its activities;
+>         -       TRANSMI: the company was operating under a different legal form from SCOP and has been transformed into a SCOP when the owne
+> r passed it down to the workers.*/
 .         gen exnihilo = 1 if type_creation == "Ex nihilo"
 (1,523 missing values generated)
 
@@ -218,8 +197,8 @@ note: label truncated to 80 characters
 .         replace reanim = 0 if reanim == .
 (4,423 real changes made)
 
-.         label variable reanim "the company was operating under a different legal fo
-> rm from SCOP, temporarily ceased its activities and restarted under the SCOP form"
+.         label variable reanim "the company was operating under a different legal form from SCOP, temporarily ceased its activities and resta
+> rted under the SCOP form"
 note: label truncated to 80 characters
 
 . 
@@ -229,9 +208,8 @@ note: label truncated to 80 characters
 .         replace transf = 0 if transf == .
 (4,236 real changes made)
 
-.         label variable transf "the company was operating under a different legal fo
-> rm from SCOP and has been transformed into a SCOP without a cease of its activities
-> "
+.         label variable transf "the company was operating under a different legal form from SCOP and has been transformed into a SCOP without
+>  a cease of its activities"
 note: label truncated to 80 characters
 
 . 
@@ -241,18 +219,15 @@ note: label truncated to 80 characters
 .         replace transmi = 0 if transmi == .
 (3,817 real changes made)
 
-.         label variable transmi "the company was operating under a different legal f
-> orm from SCOP and has been transformed into a SCOP when the owner passed it down to
->  the workers"
+.         label variable transmi "the company was operating under a different legal form from SCOP and has been transformed into a SCOP when t
+> he owner passed it down to the workers"
 note: label truncated to 80 characters
 
 . 
 .         /*Regions       
 >         We chose the Nomenclature of Territorial Units for Statistics (NUTS), 
->         Level 1, to classify SCOP according to their region. According to this nome
-> nclature, 
->         France is divided between eight spatial planning economic zones and a ninth
->  zone containing the overseas departments. 
+>         Level 1, to classify SCOP according to their region. According to this nomenclature, 
+>         France is divided between eight spatial planning economic zones and a ninth zone containing the overseas departments. 
 >         Nine binary variables thus reflect these geographical zones.*/
 .         gen FR4=1 if region =="ALSACE"
 (4,329 missing values generated)
@@ -366,20 +341,17 @@ note: label truncated to 80 characters
 . 
 . 
 .         /* Fields of activity
->         We chose to keep the same classification as the one used by the CG-Scop. Th
-> e latter is based on the French Activities Nomenclature (NAF) rev. 2, 2008 and clas
-> sifies the SCOP in eight fields of activity/ industries:
+>         We chose to keep the same classification as the one used by the CG-Scop. The latter is based on the French Activities Nomenclature (
+> NAF) rev. 2, 2008 and classifies the SCOP in eight fields of activity/ industries:
 >         -       AGR: Agriculture, forestry and fishing
 >         -       INDUEX: Extractive industry, energy, water and waste management
 >         -       INDUMA: Manufacturing industry
 >         -       CONSTRU: Construction industry
 >         -       COM: Trade, automobile and motorcycle repairs
 >         -       TRANS: Transportation and storage
->         -       SERV: Service industry including: Accommodation and restaurant; Inf
-> ormation and communication; Financial and insurance activities; Real estate activit
-> ies; Specialized, scientific and technical services; Administrative services and su
-> pport activities, Arts, entertainment and recreation activities; Other service acti
-> vities.
+>         -       SERV: Service industry including: Accommodation and restaurant; Information and communication; Financial and insurance activ
+> ities; Real estate activities; Specialized, scientific and technical services; Administrative services and support activities, Arts, enterta
+> inment and recreation activities; Other service activities.
 >         -       EDU: Education, health and social work sector.*/
 .         gen AGR = 1 if naf10lib == "Agriculture, sylviculture et pÂche"
 (4,423 missing values generated)
@@ -405,8 +377,7 @@ note: label truncated to 80 characters
 .         replace EDU = 0 if EDU == .
 (4,423 real changes made)
 
-.         gen INDUEX = 1 if naf10lib == "Industrie extractive, ÂŽnergie, eau et dÂŽch
-> ets"
+.         gen INDUEX = 1 if naf10lib == "Industrie extractive, ÂŽnergie, eau et dÂŽchets"
 (4,423 missing values generated)
 
 .         replace INDUEX = 0 if INDUEX == .
@@ -449,11 +420,10 @@ note: label truncated to 80 characters
 
 . 
 .         /* Legal forms
->         SCOP can choose between the legal form of Limited Liability Company  or Pub
-> lic Limited Company  (with a board of directors or with an executive board). 
->         SARL variable takes the value "1" when the SCOP operates under the legal fo
-> rm of Limited Liability Company and "0" when the SCOP works under the legal form Pu
-> blic Limited Company.*/
+>         SCOP can choose between the legal form of Limited Liability Company  or Public Limited Company  (with a board of directors or with a
+> n executive board). 
+>         SARL variable takes the value "1" when the SCOP operates under the legal form of Limited Liability Company and "0" when the SCOP wor
+> ks under the legal form Public Limited Company.*/
 .         gen SARL = 1 if catjur == "Société à responsabilité limitée (SARL)"
 (4,423 missing values generated)
 
@@ -486,14 +456,8 @@ note: label truncated to 80 characters
 
 . 
 .         *Life of the SCOP*
-.         //tostring annee_creation, replace
-.         //gen start = date(annee_creation, "Y") 
-.         //format start %td
-.         //tostring annee_radiation, replace
-.         //gen end = date(annee_radiation, "Y") 
-.         //format end %td
-.         gen bankrupt = 1 if (year+1) == annee_radiation |(year+2) == annee_radiatio
-> n | (year+3) == annee_radiation
+. 
+.         gen bankrupt = 1 if (year+1) == annee_radiation |(year+2) == annee_radiation | (year+3) == annee_radiation
 (4,057 missing values generated)
 
 .         replace bankrupt = 0 if bankrupt == .
@@ -505,132 +469,17 @@ note: label truncated to 80 characters
 .         tostring year, replace
 year was int now str4
 
-.         gen date = date(year, "Y") 
+.         gen time1 = date(year, "Y") 
 
-.         format date %td
+.         format time1 %td
 
 .         
 .         *snapspan idvar time_var instantaneous_vars, generate(new_begin_date)
-.         snapspan id date bankrupt, generate (time0) replace
+.         snapspan id time1 bankrupt salaries societaires_salaries societaires capital_social_ou_individuel K tota_capital_salaris_associs div
+> idend age lnK LS KLS CO COKLS SMALL MEDIUM LARGE, generate (time0) replace
 note:  724 obs. (34.2%) have only a single record; they will be ignored
 
+.         
 . 
 end of do-file
-
-. sort id year
-
-. rename date time1
-
-. stset date, failure(bankrupt == 1) id(id)
-variable date not found
-r(111);
-
-. stset time1, failure(bankrupt == 1) id(id)
-
-                id:  id
-     failure event:  bankrupt == 1
-obs. time interval:  (time1[_n-1], time1]
- exit on or before:  failure
-
-------------------------------------------------------------------------------
-      4,423  total observations
-          0  exclusions
-------------------------------------------------------------------------------
-      4,423  observations remaining, representing
-      2,114  subjects
-        366  failures in single-failure-per-subject data
-   39356006  total analysis time at risk and under observation
-                                                at risk from t =         0
-                                     earliest observed entry t =         0
-                                          last observed exit t =    18,993
-
-. stset time1, failure(bankrupt == 1) id(id) time0(time0) origine(time time1)
-option origine() not allowed
-r(198);
-
-. stset time1, failure(bankrupt == 1) id(id) time0(time0) origin(time time1)
-
-                id:  id
-     failure event:  bankrupt == 1
-obs. time interval:  (time0, time1]
- exit on or before:  failure
-    t for analysis:  (time-origin)
-            origin:  time time1
-
-------------------------------------------------------------------------------
-      4,423  total observations
-      2,114  entry time missing (time0>=.)                      PROBABLE ERROR
-------------------------------------------------------------------------------
-      2,309  observations remaining, representing
-      1,390  subjects
-        131  failures in single-failure-per-subject data
-  2,566,703  total analysis time at risk and under observation
-                                                at risk from t =         0
-                                     earliest observed entry t =         0
-                                          last observed exit t =     2,191
-
-. stset time1, failure(bankrupt == 1) id(id) time0(time0) origin(annee_creation)
-
-                id:  id
-     failure event:  bankrupt == 1
-obs. time interval:  (time0, time1]
- exit on or before:  failure
-    t for analysis:  (time-origin)
-            origin:  time annee_creation
-
-------------------------------------------------------------------------------
-      4,423  total observations
-      2,114  entry time missing (time0>=.)                      PROBABLE ERROR
-------------------------------------------------------------------------------
-      2,309  observations remaining, representing
-      1,390  subjects
-        131  failures in single-failure-per-subject data
-  2,566,703  total analysis time at risk and under observation
-                                                at risk from t =         0
-                                     earliest observed entry t =    14,796
-                                          last observed exit t =    17,111
-
-. stset time1, failure(bankrupt == 1) id(id) time0(time0) origin(annee_creation)exit 
-> (annee_raditation)
-variable annee_raditation not found
-r(111);
-
-. stset time1, failure(bankrupt == 1) id(id) time0(time0) origin(annee_creation)exit 
-> (annee_radiation)
-
-                id:  id
-     failure event:  bankrupt == 1
-obs. time interval:  (time0, time1]
- exit on or before:  time annee_radiation
-    t for analysis:  (time-origin)
-            origin:  time annee_creation
-
-------------------------------------------------------------------------------
-      4,423  total observations
-      2,114  entry time missing (time0>=.)                      PROBABLE ERROR
-        182  observations begin on or after exit
-------------------------------------------------------------------------------
-      2,127  observations remaining, representing
-      1,230  subjects
-          0  failures in single-failure-per-subject data
-  2,367,261  total analysis time at risk and under observation
-                                                at risk from t =         0
-                                     earliest observed entry t =    14,796
-                                          last observed exit t =    17,111
-
-. string year
-command string is unrecognized
-r(199);
-
-. destring year
-must specify either generate or replace option
-r(198);
-
-. destring year, reaplce
-option reaplce not allowed
-r(198);
-
-. destring year, replace
-year: all characters numeric; replaced as int
-(2114 missing values generated)
 
