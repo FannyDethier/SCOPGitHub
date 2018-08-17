@@ -10,7 +10,6 @@ log on
 use scop.dta
 ssc install xtoverid
 ssc install ranktest 
-ssc install ivreg2
 capt ssc inst estout
 
 // -----------------------------------------------------------------------------
@@ -212,9 +211,18 @@ capt ssc inst estout
 	replace LARGE = 0 if LARGE == .
 
 	*Life of the SCOP*
+	tostring annee_creation, replace
+	gen start = date(annee_creation, "Y") 
+	format start %td
+	tostring annee_radiation, replace
+	gen end = date(annee_radiation, "Y") 
+	format end %td
 	gen bankrupt = 1 if annee_radiation != .
 	replace bankrupt = 0 if annee_radiation == .
 	label variable bankrupt "1 if SCOP has known (between 2006 and 2014) bankruptcy, 0 otherwise"
+	
+	*snapspan idvar time_var instantaneous_vars, generate(new_begin_date)
+	snapspan id year annee_radiation salaries societaires_salaries societaires L capital_social_ou_individuel K tota_capital_salaris_associs rserves_lgales fonds_de_dveloppement dividende interessement participation ca_net_total V resultat_exploitation resultat_courant_avant_impots annee_radiation age lnV lnL lnK LS KLS CO COKLS PARTL, generate (time0)
 	
 	gen time = annee_radiation - 2006 if bankrupt == 1
 	replace time = 8 if bankrupt == 0
@@ -770,7 +778,7 @@ stcox $xlist, nohr
 stcox $xlist
 
 
-exit
+
 /********************************************************************************
 
 								2.DROPPING SMALL (L<10) SCOP
